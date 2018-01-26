@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using Renci.SshNet;
 using System.Net.NetworkInformation;
+using System;
+using System.Text.RegularExpressions;
 
 namespace RoboRio501
 {
@@ -140,11 +142,20 @@ namespace RoboRio501
         /// Opens a connection to the RoboRio and gets all the files in the specified file path.
         /// </summary>
         /// <param name="RoboRioFileDirectory">File path where the log files are located on the robots server</param>
-        /// <param name="saveTo">Local file path</param>
+        /// <param name="localDirectory">Local file path</param>
         /// <param name="removeFiles">If true remove files from the robot after file transfer is complete</param>
         /// <returns>true if files were successfully transfered.</returns>
-        public bool GetFilesFromRio(string RoboRioFileDirectory, string saveTo, bool removeFiles)
+        public bool GetFilesFromRio(
+            string RoboRioFileDirectory,
+            string localDirectory,
+            string matchNumber,
+            bool removeFiles, 
+            out int filesRetrieved,
+            out int filesSkipped)
         {
+            filesSkipped = 0;
+            filesRetrieved = 0;
+
             try
             {
                 sftpClient.Connect();
@@ -155,17 +166,40 @@ namespace RoboRio501
                 return false;
             }
 
-            // Get a list of the files in the specified folder
-            var remoteFileNames = sftpClient.ListDirectory(RoboRioFileDirectory);
+            // Get a list of the files from the specified folder (. and .. are directory pointers)
+            var remoteFileNames = sftpClient.ListDirectory(RoboRioFileDirectory)
+                .Where(x => x.Name != "." && x.Name != "..");
+
+            // Order by write date
             var AllFilesButTheNewest = remoteFileNames
                 .OrderByDescending(file => file.LastWriteTime)
-                .Skip(1)
-                .Where(x => x.Name != ".");
+                .Skip(1);
+
+            string firstFileName = string.Empty;
+            if (AllFilesButTheNewest.Count() > 0)
+                firstFileName = $"{AllFilesButTheNewest.First().LastWriteTime:yyyy-MM-dd HHMMss} {AllFilesButTheNewest.First().Name}";
 
             // iterate through all valid files
             foreach (var RIOfile in AllFilesButTheNewest)
             {
-                string newFile = Path.Combine(saveTo, RIOfile.Name);
+                var writeTime = RIOfile.LastWriteTime;
+                string newName = $"{writeTime:yyyy-MM-dd HHMMss} {RIOfile.Name}";
+
+                // Handel adding match number to first file
+                if(newName == firstFileName)
+                {
+                    // DateTime log name matchNumber fileExtention
+                    string prefix = newName.Substring(0, newName.LastIndexOf('.'));
+                    string extention = newName.Substring(newName.LastIndexOf('.'));
+
+                    // Remove invalid characters from match number
+                    Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+                    matchNumber = rgx.Replace(matchNumber, "");
+
+                    newName = $"{prefix} {matchNumber}{extention}";
+                }
+
+                string newFile = Path.Combine(localDirectory, newName);
                 try
                 {
                     using (var file = File.OpenWrite(newFile))
@@ -178,9 +212,17 @@ namespace RoboRio501
                         }
                     }
                 }
-                catch { /* Eat the exception */ }
+                catch(Exception e)
+                {
+                    // Skip the failed file 
+                    ++filesSkipped;
+                    continue;
+                }
+
+                ++filesRetrieved;
             }
 
+            // Disconnect from FTP connection
             sftpClient.Disconnect();
 
             // Successful download

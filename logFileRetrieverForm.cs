@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using RoboRio501;
 using System.Windows.Forms;
 
@@ -65,14 +66,22 @@ namespace Read_Rio_Log
 
             // Delete files as they are downloaded
             bool deleteOnDownLoad = this.DeleteFilesFromRobotOption.Checked;
-
+            
             // get files
-            bool successfullDownLoad = robotConnection.GetFilesFromRio(rioDirectory, localDirectory, deleteOnDownLoad);
+            bool successfullDownLoad = robotConnection.GetFilesFromRio(
+                rioDirectory,
+                localDirectory,
+                matchNUmberTextBox.Text,
+                deleteOnDownLoad,
+                out int filesRetrieved,
+                out int filesSkipped);
 
             this.notConectedTextBox.Visible = !successfullDownLoad;
             if (successfullDownLoad)
             {
+                string originalText = retrieveLogButton.Text;
                 retrieveLogButton.Text = "Complete";
+                retrieveLogButton.Text = originalText;
             }
             
             this.testConnectionButton.Cursor = System.Windows.Forms.Cursors.Hand;

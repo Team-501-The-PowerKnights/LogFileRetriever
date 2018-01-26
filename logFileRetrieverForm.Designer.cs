@@ -50,6 +50,8 @@ namespace Read_Rio_Log
             this.notConectedTextBox = new System.Windows.Forms.TextBox();
             this.saveSettingsButton = new System.Windows.Forms.Button();
             this.DeleteFilesFromRobotOption = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.matchNUmberTextBox = new System.Windows.Forms.TextBox();
             this.optionsLayout.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -147,6 +149,8 @@ namespace Read_Rio_Log
             this.optionsLayout.ColumnCount = 2;
             this.optionsLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.58199F));
             this.optionsLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.41801F));
+            this.optionsLayout.Controls.Add(this.matchNUmberTextBox, 1, 6);
+            this.optionsLayout.Controls.Add(this.label2, 0, 6);
             this.optionsLayout.Controls.Add(this.downloadFromTextBox, 1, 5);
             this.optionsLayout.Controls.Add(this.label1, 0, 5);
             this.optionsLayout.Controls.Add(this.portLabel, 0, 4);
@@ -161,15 +165,16 @@ namespace Read_Rio_Log
             this.optionsLayout.Controls.Add(this.usernameTextBox, 1, 1);
             this.optionsLayout.Location = new System.Drawing.Point(12, 9);
             this.optionsLayout.Name = "optionsLayout";
-            this.optionsLayout.RowCount = 6;
+            this.optionsLayout.RowCount = 7;
             this.optionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.optionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.optionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.optionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.optionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.optionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.optionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.optionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.optionsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.optionsLayout.Size = new System.Drawing.Size(341, 183);
+            this.optionsLayout.Size = new System.Drawing.Size(341, 213);
             this.optionsLayout.TabIndex = 15;
             // 
             // downloadFromTextBox
@@ -298,12 +303,31 @@ namespace Read_Rio_Log
             this.DeleteFilesFromRobotOption.AutoSize = true;
             this.DeleteFilesFromRobotOption.Checked = global::Read_Rio_Log.Properties.Settings.Default.removeFilesSetting;
             this.DeleteFilesFromRobotOption.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Read_Rio_Log.Properties.Settings.Default, "removeFilesSetting", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.DeleteFilesFromRobotOption.Location = new System.Drawing.Point(12, 198);
+            this.DeleteFilesFromRobotOption.Location = new System.Drawing.Point(12, 230);
             this.DeleteFilesFromRobotOption.Name = "DeleteFilesFromRobotOption";
             this.DeleteFilesFromRobotOption.Size = new System.Drawing.Size(347, 21);
             this.DeleteFilesFromRobotOption.TabIndex = 19;
             this.DeleteFilesFromRobotOption.Text = "Remove files from robot when download completes.";
             this.DeleteFilesFromRobotOption.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.label2.Location = new System.Drawing.Point(3, 188);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(69, 18);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "Match #:";
+            // 
+            // matchNUmberTextBox
+            // 
+            this.matchNUmberTextBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.matchNUmberTextBox.Location = new System.Drawing.Point(103, 185);
+            this.matchNUmberTextBox.Name = "matchNUmberTextBox";
+            this.matchNUmberTextBox.Size = new System.Drawing.Size(234, 24);
+            this.matchNUmberTextBox.TabIndex = 20;
             // 
             // logFileRetrieverMainForm
             // 
@@ -311,7 +335,7 @@ namespace Read_Rio_Log
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(497, 229);
+            this.ClientSize = new System.Drawing.Size(497, 258);
             this.Controls.Add(this.DeleteFilesFromRobotOption);
             this.Controls.Add(this.optionsLayout);
             this.Controls.Add(this.saveSettingsButton);
@@ -352,6 +376,8 @@ namespace Read_Rio_Log
         private System.Windows.Forms.TextBox notConectedTextBox;
         private System.Windows.Forms.Button saveSettingsButton;
         private System.Windows.Forms.CheckBox DeleteFilesFromRobotOption;
+        private System.Windows.Forms.TextBox matchNUmberTextBox;
+        private System.Windows.Forms.Label label2;
     }
 }
 
